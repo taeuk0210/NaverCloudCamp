@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd">
+	
+	<context:component-scan base-package="com.myedu.myapp.hello"/>
+	
+	<bean id="helloLog" class="com.myedu.myapp.hello.util.HelloLog"/>
+	<bean id="performanceLog" class="com.myedu.myapp.hello.app.PerformanceLog"/>
+	
+	<aop:config>
+		<aop:pointcut id="hello" expression="execution(* com.myedu..HelloService.hello(..))" />
+		
+		<aop:aspect ref="helloLog">
+			<aop:before method="log" pointcut-ref="hello"/>
+		</aop:aspect>	
+		
+		<aop:aspect ref="performanceLog">
+			<aop:around method="trace" pointcut-ref="hello"/>
+		</aop:aspect>
+	</aop:config>
+	
+</beans>
